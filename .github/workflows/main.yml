@@ -12,6 +12,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    # Ref:
+    # https://github.com/actions/checkout#fetch-all-branches
+    - name: Fetch all branches
+      run: |
+        git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+
     - name: Cache bundler
       uses: actions/cache@v1
       with:
@@ -21,7 +27,18 @@ jobs:
           bundler-${{ hashFiles('Gemfile.lock') }}
 
     - name: Setup
-      run: bundle
+      run: |
+        sbundle
+
+    - name: Run rubocop --auto-correct and push
+      run: |
+        git config --global user.name 'Yusuke Hosonuma'
+        git config --global user.email 'tobi462@users.noreply.github.com'
+        git checkout -b ${{ github.head_ref }} origin/${{ github.head_ref }}
+        bundle exec rubocop --auto-correct && true
+        git add -u
+        git diff-index --quiet HEAD -- || git commit -m '[ci skip] $ rubocop --auto-correct'
+        git push
 
     - name: Run danger
       run: bundle exec danger
