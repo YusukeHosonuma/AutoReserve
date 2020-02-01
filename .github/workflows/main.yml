@@ -36,7 +36,7 @@ jobs:
         git config --global user.name 'Yusuke Hosonuma'
         git config --global user.email '2990285+YusukeHosonuma@users.noreply.github.com'
         git checkout -b ${{ github.head_ref }} origin/${{ github.head_ref }}
-        bundle exec rubocop --auto-correct && true
+        sbundle exec rubocop --auto-correct && true
         git add -u
         git commit -m '[ci skip] $ rubocop --auto-correct'
         git push
