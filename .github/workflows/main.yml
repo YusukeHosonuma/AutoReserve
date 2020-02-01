@@ -35,6 +35,7 @@ jobs:
 
     - name: Run rubocop --auto-correct
       run: |
+        `bundle exec rubocop --auto-correct`
         M=`git config -l`
         echo "--- git config --"
         echo "$M"
