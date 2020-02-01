@@ -12,8 +12,10 @@ ALLOWTIMES = [
   "23:00",
   "23:30",
   "24:00",
-  "24:30"
+  "24:30",
 ].freeze
+
+fooBar = "hello"
 
 TAB_1 = "&data[tab1]"
 
