@@ -38,7 +38,7 @@ jobs:
         git checkout -b ${{ github.head_ref }} origin/${{ github.head_ref }}
         bundle exec rubocop --auto-correct && true
         git add -u
-        git diff-index --quiet HEAD -- || git commit -m '[ci skip] $ rubocop --auto-correct'
+        git commit -m '[ci skip] $ rubocop --auto-correct'
         git push
 
     - name: Run danger
