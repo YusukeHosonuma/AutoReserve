@@ -11,6 +11,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      # with:
+      #   ref: ${{ github.head_ref }}
+
+    - run: |
+        git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
 
     - name: Cache bundler
       uses: actions/cache@v1
@@ -22,6 +27,32 @@ jobs:
 
     - name: Setup
       run: bundle
+
+    - name: Dump GitHub Context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "${GITHUB_CONTEXT}"
+
+    - name: Run rubocop --auto-correct
+      run: |
+        M=`git config -l`
+        echo "--- git config --"
+        echo "$M"
+        echo "--- git remote --"
+        M=`git remote -v`
+        echo "$M"
+        echo "--- git branch --"
+        M=`git branch -a`
+        echo "$M"
+        git config --global user.name 'Yusuke Hosonuma'
+        git config --global user.email 'tobi462@users.noreply.github.com'
+        git checkout -b ${{ github.head_ref }}
+        echo 'foo' >> README.md
+        git add -u
+        git diff-index --quiet HEAD -- || git commit -m '[ci skip] $ rubocop --auto-correct'
+        git push
+        echo 'Good!!'
+        exit 0
 
     - name: Run danger
       run: bundle exec danger
