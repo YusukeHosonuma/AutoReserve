@@ -47,6 +47,10 @@ jobs:
         if [ ! "bundle exec rubocop --auto-correct" ]; then
           exit 0
         fi
+        bundle exec rubocop --auto-correct && true
+        echo "--- git status --"
+        M=`git status`
+        echo "$M"
         echo "--- git branch --"
         M=`git branch -a`
         echo "$M"
