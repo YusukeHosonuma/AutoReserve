@@ -28,3 +28,4 @@ or auto correct.
 ```sh
 bundle exec rubocop --auto-correct
 ```
+foo
