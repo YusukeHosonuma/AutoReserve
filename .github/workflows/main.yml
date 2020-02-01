@@ -23,6 +23,27 @@ jobs:
     - name: Setup
       run: bundle
 
+    - name: Dump GitHub Context
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
+      run: echo "${GITHUB_CONTEXT}"
+
+    - name: Run rubocop --auto-correct
+      run: |
+        M=`git config -l`
+        echo "$M"
+        M=`git remote -v`
+        echo "$M"
+        git config --global user.name 'Yusuke Hosonuma'
+        git config --global user.email 'tobi462@users.noreply.github.com'
+        git checkout -b ${{ github.head_ref }} origin/${{ github.head_ref }}
+        echo 'foo' >> README.md
+        git add -u
+        git diff-index --quiet HEAD -- || git commit -m '[ci skip] $ rubocop --auto-correct'
+        git push origin github-actions/auto-correct
+        echo 'Good!!'
+        exit 0
+
     - name: Run danger
       run: bundle exec danger
 
