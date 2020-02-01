@@ -31,7 +31,6 @@ jobs:
         bundle
 
     - name: Run rubocop --auto-correct and push
-      shell: bash -ex {0}
       run: |
         git config --global user.name 'Yusuke Hosonuma'
         git config --global user.email '2990285+YusukeHosonuma@users.noreply.github.com'
